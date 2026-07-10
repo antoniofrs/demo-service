@@ -3,6 +3,7 @@ package it.its.demo.demo_service.controller;
 import it.its.demo.demo_service.model.Book;
 import it.its.demo.demo_service.model.BuyRequest;
 import it.its.demo.demo_service.service.BookService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -76,7 +77,7 @@ public class BookController {
     @ResponseStatus(HttpStatus.OK)
     public Book buy(
             @PathVariable String id,
-            @RequestBody BuyRequest buyRequest
+            @Valid @RequestBody BuyRequest buyRequest
     ){
         return bookService.buy(id, buyRequest);
     }
