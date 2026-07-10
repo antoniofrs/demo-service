@@ -1,25 +1,15 @@
-package it.its.demo.demo_service.model;
+package it.its.demo.demo_service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Book {
+@Data
+public class BookDto {
     String id;
     String name;
     String author;
     Integer quantity;
 }
-
-/*
-*
-* {
- *   "id": "1234",
- *   "name": "Il piccolo principe",
- *   "author": "Antoine"
-* }
-
-* */

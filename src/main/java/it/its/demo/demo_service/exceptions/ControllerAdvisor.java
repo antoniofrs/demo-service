@@ -29,7 +29,7 @@ public class ControllerAdvisor {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public String badInput(MethodArgumentNotValidException ex){
-        return "invalid input";
+        return ex.getMessage();
     }
 
 }

@@ -1,5 +1,7 @@
 package it.its.demo.demo_service.service;
 
+import it.its.demo.demo_service.dto.BookDto;
+import it.its.demo.demo_service.dto.InsertBook;
 import it.its.demo.demo_service.exceptions.BookNotFoundException;
 import it.its.demo.demo_service.exceptions.BooksNotAvailable;
 import it.its.demo.demo_service.model.Book;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,9 +18,23 @@ public class BookService {
 
     private final List<Book> books = new ArrayList<>();
 
-    public Book insert(Book book) {
+    public BookDto insert(InsertBook insertBook) {
+
+        Book book = new Book();
+        book.setId(UUID.randomUUID().toString());
+        book.setName(insertBook.getName());
+        book.setAuthor(insertBook.getAuthor());
+        book.setQuantity(insertBook.getQuantity());
+
         books.add(book);
-        return book;
+
+        BookDto bookDto = new BookDto();
+        bookDto.setId(book.getId());
+        bookDto.setName(book.getName());
+        bookDto.setAuthor(book.getAuthor());
+        bookDto.setQuantity(book.getQuantity());
+
+        return bookDto;
     }
 
     public List<Book> findAll() {

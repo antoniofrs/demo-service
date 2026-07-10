@@ -1,5 +1,7 @@
 package it.its.demo.demo_service.controller;
 
+import it.its.demo.demo_service.dto.BookDto;
+import it.its.demo.demo_service.dto.InsertBook;
 import it.its.demo.demo_service.model.Book;
 import it.its.demo.demo_service.model.BuyRequest;
 import it.its.demo.demo_service.service.BookService;
@@ -28,8 +30,8 @@ public class BookController {
 
     @PostMapping("/v1")
     @ResponseStatus(HttpStatus.CREATED)
-    public Book insert (
-            @RequestBody Book book
+    public BookDto insert (
+            @Valid @RequestBody InsertBook book
     ) {
         return bookService.insert(book);
     }
