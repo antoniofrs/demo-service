@@ -12,12 +12,11 @@ public class TransactionRepository {
 
     private final List<Transaction> transactions = new ArrayList<>();
 
-    public Transaction save(Transaction transaction){
+    public void save(Transaction transaction) {
         transactions.add(transaction);
-        return transaction;
     }
 
-    public List<Transaction> findByBookId(String id){
+    public List<Transaction> findByBookId(String id) {
         return transactions.stream()
                 .filter(transaction -> transaction.getBookId().equals(id))
                 .collect(Collectors.toList());
