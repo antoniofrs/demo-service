@@ -8,62 +8,68 @@ import it.its.demo.demo_service.exceptions.BookNotFoundException;
 import it.its.demo.demo_service.exceptions.BooksNotAvailable;
 import it.its.demo.demo_service.mapper.BookMapper;
 import it.its.demo.demo_service.model.Book;
+import it.its.demo.demo_service.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class BookService {
 
-    private final List<Book> books = new ArrayList<>();
-
     @Autowired
     private BookMapper bookMapper;
 
+    @Autowired
+    private BookRepository bookRepository;
+
     public BookDto insert(InsertBook insertBook) {
         Book book = bookMapper.toModel(insertBook);
-        books.add(book);
+        bookRepository.save(book);
         return bookMapper.toDto(book);
     }
 
 
     public BookDto findById(String id) {
-        return books.stream()
-                .filter(it -> it.getId().equals(id))
-                .map(book -> bookMapper.toDto(book))
-                .findFirst()
+        Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
+        return bookMapper.toDto(book);
     }
 
     public List<BookDto> findAll() {
-        return books.stream()
+        return bookRepository.findAll().stream()
                 .map(book -> bookMapper.toDto(book))
                 .collect(Collectors.toList());
     }
 
     public List<BookDto> findByName(String name) {
-        return books.stream()
-                .filter(it -> it.getName().equals(name))
+        return bookRepository.findByName(name).stream()
                 .map(book -> bookMapper.toDto(book))
                 .collect(Collectors.toList());
     }
 
     public void delete(String id) {
-        findById(id);
-        books.removeIf(it -> it.getId().equals(id));
+        int result = bookRepository.delete(id);
+        if(result == 0){
+            throw new BookNotFoundException(id);
+        }
     }
 
     public BookDto buy(String id, BuyRequest request) {
-        Book book = getBookById(id);
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
 
         if (book.getQuantity() <= request.getQuantity() - 1) {
             throw new BooksNotAvailable(id, request.getQuantity());
         }
 
         book.setQuantity(book.getQuantity() - request.getQuantity());
+
+        int result = bookRepository.update(id, book);
+        if(result == 0){
+            throw new BookNotFoundException(id);
+        }
 
         return bookMapper.toDto(book);
     }
@@ -72,7 +78,8 @@ public class BookService {
     // PatchBook -> BookDto
     public BookDto patch(String id, PatchBook patchBook) {
 
-        Book toUpdate = getBookById(id);
+        Book toUpdate = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
 
         if (patchBook.getAuthor() != null) {
             toUpdate.setAuthor(patchBook.getAuthor());
@@ -86,25 +93,27 @@ public class BookService {
             toUpdate.setQuantity(patchBook.getQuantity());
         }
 
+        int result = bookRepository.update(id, toUpdate);
+        if(result == 0){
+            throw new BookNotFoundException(id);
+        }
+
         return bookMapper.toDto(toUpdate);
     }
 
     // BookInsertDto -> BookDto
     public BookDto put(String id, InsertBook insert) {
 
-        Book toUpdate = getBookById(id);
+        Book toUpdate = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+
         toUpdate.setAuthor(insert.getAuthor());
         toUpdate.setName(insert.getName());
         toUpdate.setQuantity(insert.getQuantity());
 
+        bookRepository.update(id, toUpdate);
+
         return bookMapper.toDto(toUpdate);
     }
 
-
-    private Book getBookById(String id) {
-        return books.stream()
-                .filter(it -> it.getId().equals(id))
-                .findFirst()
-                .orElseThrow(() -> new BookNotFoundException(id));
-    }
 }
