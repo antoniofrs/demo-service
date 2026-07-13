@@ -51,16 +51,15 @@ public class BookRepository {
     public int update(String id, Book updated) {
         Optional<Book> optionalBook = findById(id);
 
-        if(optionalBook.isPresent()){
-            Book book = optionalBook.get();
-            book.setName(updated.getName());
-            book.setAuthor(updated.getAuthor());
-            book.setQuantity(updated.getQuantity());
-            return 1;
-        }
-        else {
+        if (optionalBook.isEmpty()) {
             return 0;
         }
+
+        Book book = optionalBook.get();
+        book.setName(updated.getName());
+        book.setAuthor(updated.getAuthor());
+        book.setQuantity(updated.getQuantity());
+        return 1;
 
     }
 }
