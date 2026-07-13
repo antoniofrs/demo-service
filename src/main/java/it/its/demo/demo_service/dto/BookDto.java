@@ -12,4 +12,5 @@ public class BookDto {
     String name;
     String author;
     Integer quantity;
+    Double price;
 }
