@@ -1,18 +1,18 @@
 package it.its.demo.demo_service.service;
 
-import it.its.demo.demo_service.dto.BookDto;
-import it.its.demo.demo_service.dto.BuyRequest;
-import it.its.demo.demo_service.dto.InsertBook;
-import it.its.demo.demo_service.dto.PatchBook;
+import it.its.demo.demo_service.dto.*;
 import it.its.demo.demo_service.exceptions.BookNotFoundException;
 import it.its.demo.demo_service.exceptions.BooksNotAvailable;
 import it.its.demo.demo_service.mapper.BookMapper;
 import it.its.demo.demo_service.model.Book;
+import it.its.demo.demo_service.model.Transaction;
 import it.its.demo.demo_service.repository.BookRepository;
+import it.its.demo.demo_service.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +23,9 @@ public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public BookDto insert(InsertBook insertBook) {
         Book book = bookMapper.toModel(insertBook);
@@ -64,12 +67,20 @@ public class BookService {
             throw new BooksNotAvailable(id, request.getQuantity());
         }
 
+
         book.setQuantity(book.getQuantity() - request.getQuantity());
 
         int result = bookRepository.update(id, book);
         if(result == 0){
             throw new BookNotFoundException(id);
         }
+
+        Transaction transaction = new Transaction();
+        transaction.setQntSell(request.getQuantity());
+        transaction.setIdBook(book.getId());
+        transaction.setIdTra(UUID.randomUUID().toString());
+        transactionRepository.save(transaction);
+
 
         return bookMapper.toDto(book);
     }
@@ -117,6 +128,15 @@ public class BookService {
         }
 
         return bookMapper.toDto(toUpdate);
+    }
+
+    public TotalDto totalSellBookId (String idBook){
+        TotalDto totalDto = new TotalDto();
+        Integer qntSell= transactionRepository.totalByIdBook(idBook);
+        Book book= bookRepository.findById(idBook).orElseThrow(() -> new BookNotFoundException(idBook));
+        totalDto.setTotal((book.getPrezzo()*qntSell));
+        totalDto.setIdBook(book.getId());
+        return totalDto;
     }
 
 }
