@@ -27,9 +27,6 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @Autowired
-    private TransactionRepository transactionRepository;
-
     @PostMapping("/v1")
     @ResponseStatus(HttpStatus.CREATED)
     public BookDto insert (
