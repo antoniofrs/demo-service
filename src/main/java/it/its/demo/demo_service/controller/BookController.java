@@ -1,9 +1,6 @@
 package it.its.demo.demo_service.controller;
 
-import it.its.demo.demo_service.dto.BookDto;
-import it.its.demo.demo_service.dto.BuyRequest;
-import it.its.demo.demo_service.dto.InsertBook;
-import it.its.demo.demo_service.dto.PatchBook;
+import it.its.demo.demo_service.dto.*;
 import it.its.demo.demo_service.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +25,14 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    @GetMapping("/{id}/guadagno/v1")
+    @ResponseStatus(HttpStatus.OK)
+    public TransactionDto getTotaleGuadagnato(
+            @PathVariable String id
+    ){
+        return bookService.getGuadagnoByBookId(id);
+    }
 
     @PostMapping("/v1")
     @ResponseStatus(HttpStatus.CREATED)

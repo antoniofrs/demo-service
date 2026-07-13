@@ -1,9 +1,6 @@
 package it.its.demo.demo_service.service;
 
-import it.its.demo.demo_service.dto.BookDto;
-import it.its.demo.demo_service.dto.BuyRequest;
-import it.its.demo.demo_service.dto.InsertBook;
-import it.its.demo.demo_service.dto.PatchBook;
+import it.its.demo.demo_service.dto.*;
 import it.its.demo.demo_service.exceptions.BookNotFoundException;
 import it.its.demo.demo_service.exceptions.BooksNotAvailable;
 import it.its.demo.demo_service.mapper.BookMapper;
@@ -23,6 +20,9 @@ public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private TransactionService transactionService;
 
     public BookDto insert(InsertBook insertBook) {
         Book book = bookMapper.toModel(insertBook);
@@ -65,6 +65,7 @@ public class BookService {
         }
 
         book.setQuantity(book.getQuantity() - request.getQuantity());
+        transactionService.registraTransazione(book, request.getQuantity());
 
         int result = bookRepository.update(id, book);
         if(result == 0){
@@ -117,6 +118,15 @@ public class BookService {
         }
 
         return bookMapper.toDto(toUpdate);
+    }
+
+    public TransactionDto getGuadagnoByBookId(String id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+
+        Double totale = transactionService.getTotaleGuadagnato(id);
+
+        return new TransactionDto(book.getId(), book.getName(), totale);
     }
 
 }

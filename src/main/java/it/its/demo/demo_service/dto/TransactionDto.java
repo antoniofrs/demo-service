@@ -4,13 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class BookDto {
-    String id;
-    String name;
-    String author;
-    Integer quantity;
-    Double prezzo;
+public class TransactionDto {
+    String bookId;
+    String bookName;
+    Double totaleGuadagnato;
 }
