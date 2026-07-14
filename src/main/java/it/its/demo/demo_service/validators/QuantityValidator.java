@@ -7,7 +7,7 @@ public class QuantityValidator implements ConstraintValidator<QuantityConstraint
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
         if (value <= 1) {
-            return true;
+            return false;
         }
         // Verifica la presenza di divisori fino alla radice quadrata del numero
         for (int i = 2; i <= Math.sqrt(value); i++) {
