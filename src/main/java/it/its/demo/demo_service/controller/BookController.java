@@ -29,7 +29,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @PostMapping("/v2")
+    @PostMapping("/v1")
     @ResponseStatus(HttpStatus.CREATED)
     public BookDto insert (
             @Valid @RequestBody InsertBook book
