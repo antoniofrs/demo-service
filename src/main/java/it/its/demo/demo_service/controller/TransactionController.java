@@ -13,11 +13,11 @@ public class TransactionController {
     @Autowired
     private BookService bookService;
 
-    @PostMapping("/{id}/total")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public TotalDto fai(
-            @PathVariable String id
-    ) {
-        return bookService.totalForId(id);
-    }
+//    @PostMapping("/{id}/total")
+//    @ResponseStatus(HttpStatus.ACCEPTED)
+//    public TotalDto fai(
+//            @PathVariable String id
+//    ) {
+//        return bookService.totalForId(id);
+//    }
 }
