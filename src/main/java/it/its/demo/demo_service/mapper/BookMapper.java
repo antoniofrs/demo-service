@@ -16,17 +16,17 @@ public class BookMapper {
         bookDto.setName(book.getName());
         bookDto.setAuthor(book.getAuthor());
         bookDto.setQuantity(book.getQuantity());
-        bookDto.setPrezzo(book.getPrezzo());
+        bookDto.setPrice(book.getPrice());
         return bookDto;
     }
 
     public Book toModel(InsertBook bookDto){
         Book book = new Book();
-        book.setId(UUID.randomUUID().toString());
+//        book.setId(UUID.randomUUID().toString());
         book.setName(bookDto.getName());
         book.setAuthor(bookDto.getAuthor());
         book.setQuantity(bookDto.getQuantity());
-        book.setPrezzo(bookDto.getPrezzo());
+        book.setPrice(bookDto.getPrice());
         return book;
     }
 

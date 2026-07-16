@@ -1,0 +1,17 @@
+services:
+  sba:
+    build: .
+    ports:
+      - 8080:8080
+    networks:
+      - demoservicent
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: pippopippo
+    networks:
+      - demoservicent
+networks:
+  demoservicent:
+    driver: bridge
+
