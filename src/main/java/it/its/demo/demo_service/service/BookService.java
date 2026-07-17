@@ -1,6 +1,7 @@
 package it.its.demo.demo_service.service;
 
 import it.its.demo.demo_service.dto.*;
+import it.its.demo.demo_service.exceptions.BookDeletedException;
 import it.its.demo.demo_service.exceptions.BookNotFoundException;
 import it.its.demo.demo_service.exceptions.BooksNotAvailable;
 import it.its.demo.demo_service.mapper.BookMapper;
@@ -37,52 +38,59 @@ public class BookService {
     }
 
 
-//    public BookDto findById(String id) {
+    public BookDto findById(String id) {
 //        Book book = bookRepository.findById(id)
 //                .orElseThrow(() -> new BookNotFoundException(id));
 //        return bookMapper.toDto(book);
-//    }
+        return bookMapper.toDto(bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id)));
+    }
 //
-//    public List<BookDto> findAll() {
-//        return bookRepository.findAll().stream()
-//                .map(book -> bookMapper.toDto(book))
-//                .collect(Collectors.toList());
-//    }
+    public List<BookDto> findAll() {
+        return bookRepository.findAll().stream()
+                .map(book -> bookMapper.toDto(book))
+                .collect(Collectors.toList());
+    }
 //
-//    public List<BookDto> findByName(String name) {
-//        return bookRepository.findByName(name).stream()
-//                .map(book -> bookMapper.toDto(book))
-//                .collect(Collectors.toList());
-//    }
+    public List<BookDto> findByNameContaining(String name) {
+        return bookRepository.findByNameContaining(name).stream()
+                .map(book -> bookMapper.toDto(book))
+                .collect(Collectors.toList());
+    }
 //
-//    public void delete(String id) {
-//        int result = bookRepository.delete(id);
+    public void deleteById(String id) {
+        if (bookRepository.existsById(id)){
+            bookRepository.deleteById(id);
+        }else throw new BookNotFoundException(id);
+
+        throw new BookDeletedException(id);
 //        if(result == 0){
 //            throw new BookNotFoundException(id);
 //        }
-//    }
+    }
 //
-//    public BookDto buy(String id, BuyRequest request) {
-//        Book book = bookRepository.findById(id)
-//                .orElseThrow(() -> new BookNotFoundException(id));
-//
-//        if (book.getQuantity() <= request.getQuantity() - 1) {
-//            throw new BooksNotAvailable(id, request.getQuantity());
-//        }
-//
-//        book.setQuantity(book.getQuantity() - request.getQuantity());
-//
+    public BookDto buy(String id, BuyRequest request) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+
+        if (book.getQuantity() <= request.getQuantity() - 1) {
+            throw new BooksNotAvailable(id, request.getQuantity());
+        }
+
+        book.setQuantity(book.getQuantity() - request.getQuantity());
+
 //        int result = bookRepository.update(id, book);
+        bookRepository.save(book);
 //        if(result == 0){
 //            throw new BookNotFoundException(id);
 //        }
-//        Transaction transaction=new Transaction();
+        Transaction transaction=new Transaction();
 //        transaction.setIdTrans(UUID.randomUUID().toString());
-//        transaction.setIdBook(book.getId());
-//        transaction.setTotal(book.getPrice()* request.getQuantity() );
-//        transactionRepository.save(transaction);
-//        return bookMapper.toDto(book);
-//    }
+        transaction.setBook(book);
+        transaction.setTotal(book.getPrice()* request.getQuantity() );
+        transaction.setQuantityBought(request.getQuantity());
+        transactionRepository.save(transaction);
+        return bookMapper.toDto(book);
+    }
 //
 //
 //    // PatchBook -> BookDto
@@ -90,7 +98,6 @@ public class BookService {
 
         Book toUpdate = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
-
         if (patchBook.getAuthor() != null) {
             toUpdate.setAuthor(patchBook.getAuthor());
         }
@@ -101,6 +108,9 @@ public class BookService {
 
         if (patchBook.getQuantity() != null) {
             toUpdate.setQuantity(patchBook.getQuantity());
+        }
+        if (patchBook.getPrice() != null) {
+            toUpdate.setPrice(patchBook.getPrice());
         }
 
 //        int result =
@@ -113,22 +123,23 @@ public class BookService {
     }
 //
 //    // BookInsertDto -> BookDto
-//    public BookDto put(String id, InsertBook insert) {
-//
-//        Book toUpdate = bookRepository.findById(id)
-//                .orElseThrow(() -> new BookNotFoundException(id));
-//
-//        toUpdate.setAuthor(insert.getAuthor());
-//        toUpdate.setName(insert.getName());
-//        toUpdate.setQuantity(insert.getQuantity());
-//
+    public BookDto put(String id, InsertBook insert) {
+
+        Book toUpdate = bookRepository.findById(id)
+                .orElseThrow(() -> new BookNotFoundException(id));
+
+        toUpdate.setAuthor(insert.getAuthor());
+        toUpdate.setName(insert.getName());
+        toUpdate.setQuantity(insert.getQuantity());
+
 //        int result = bookRepository.update(id, toUpdate);
 //        if(result == 0){
 //            throw new BookNotFoundException(id);
 //        }
-//
-//        return bookMapper.toDto(toUpdate);
-//    }
+        bookRepository.save(toUpdate);
+
+        return bookMapper.toDto(toUpdate);
+    }
 //
 //
 //    public TotalDto totalForId(String id) {

@@ -29,8 +29,10 @@ public interface  BookRepository extends JpaRepository<Book,String>{
 //        return books;
 //    }
 //
-//    public List<Book> findByName(String name){
-//        return books.stream()
+     List<Book> findByNameContaining(String name);
+
+//    public default List<Book> findByName(String name){
+//        return findAll().stream()
 //                .filter(book -> book.getName().equals(name))
 //                .collect(Collectors.toList());
 //    }
@@ -51,18 +53,18 @@ public interface  BookRepository extends JpaRepository<Book,String>{
 ////
 //    public int update(String id,Book updated) ;
 
-    default int update(String id, Book updated) {
-        Optional<Book> optionalBook = findById(id);
-
-        if (optionalBook.isEmpty()) {
-            return 0;
-        }
-
-        Book book = optionalBook.get();
-        book.setName(updated.getName());
-        book.setAuthor(updated.getAuthor());
-        book.setQuantity(updated.getQuantity());
-        return 1;
-
-    }
+//    default int update(String id, Book updated) {
+//        Optional<Book> optionalBook = findById(id);
+//
+//        if (optionalBook.isEmpty()) {
+//            return 0;
+//        }
+//
+//        Book book = optionalBook.get();
+//        book.setName(updated.getName());
+//        book.setAuthor(updated.getAuthor());
+//        book.setQuantity(updated.getQuantity());
+//        return 1;
+//
+//    }
 }

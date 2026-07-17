@@ -49,7 +49,7 @@ public class BookMapper {
             book.setPrice(p.getPrice());
             return book;
         }
-        if (o instanceof PatchBook p) {
+        if (o instanceof BookDto p) {
             book=new Book();
             book.setName(p.getName());
             book.setAuthor(p.getAuthor());
@@ -57,6 +57,7 @@ public class BookMapper {
             book.setPrice(p.getPrice());
             return book;
         }
+        return book= null;
     }
 
 }
