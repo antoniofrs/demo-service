@@ -19,9 +19,12 @@ public class InsertBook {
     @NotBlank(message = "Name cannot be blank")
     String name;
 
-    @CustomNameConstraint(value="antonio frisenda",message = "non sei il benvenuto")
-    @NotBlank(message = "Author cannot be blank")
-    String author;
+
+    @NotNull(message = "Author cannot be blank")
+    @Positive (message = "Author cannot be null or negative")
+    //abbiamo modificato author in integer perchè ora sarà l'id dell'entità Author
+    Integer author;
+    //String author;
 
     @QuantityConstraint(message = "non valido")
     @NotNull(message = "Quantity cannot be null or negative")

@@ -37,23 +37,23 @@ public class BookController {
         return bookService.insert(book);
     }
 
-//    @PatchMapping("/{id}/v1")
-//    @ResponseStatus(HttpStatus.OK)
-//    public BookDto patch (
-//            @PathVariable String id,
-//            @RequestBody PatchBook patchBook
-//    ) {
-//        return bookService.patch(id, patchBook);
-//    }
-//
-//    @PutMapping("/{id}/v1")
-//    @ResponseStatus(HttpStatus.OK)
-//    public BookDto patch (
-//            @PathVariable String id,
-//            @RequestBody InsertBook insertBook
-//    ) {
-//        return bookService.put(id, insertBook);
-//    }
+    @PatchMapping("/{id}/v1")
+    @ResponseStatus(HttpStatus.OK)
+    public BookDto patch (
+            @PathVariable String id,
+            @RequestBody PatchBook patchBook
+    ) {
+        return bookService.patch(id, patchBook);
+    }
+
+    @PutMapping("/{id}/v1")
+    @ResponseStatus(HttpStatus.OK)
+    public BookDto put (
+            @PathVariable String id,
+            @RequestBody InsertBook insertBook
+    ) {
+        return bookService.put(id, insertBook);
+    }
 //
 //    @GetMapping("/v1")
 //    @ResponseStatus(HttpStatus.OK)
@@ -61,36 +61,36 @@ public class BookController {
 //        return bookService.findAll();
 //    }
 //
-//    @GetMapping("/{id}/v1")
-//    @ResponseStatus(HttpStatus.OK)
-//    public BookDto findById(
-//            @PathVariable String id
-//    ){
-//        return bookService.findById(id);
-//    }
+    @GetMapping("/{id}/v1")
+    @ResponseStatus(HttpStatus.OK)
+    public BookDto findById(
+            @PathVariable String id
+    ){
+        return bookService.findById(id);
+    }
 //
-//    @GetMapping("/search/v1")
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<BookDto> findByName(
-//            @RequestParam String name
-//    ){
-//        return bookService.findByName(name);
-//    }
+    @GetMapping("/search/v1")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookDto> findByName(
+            @RequestParam String name
+    ){
+        return bookService.findByName(name);
+    }
 //
-//    @DeleteMapping("/{id}/v1")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void delete(
-//            @PathVariable String id
-//    ){
-//       bookService.delete(id);
-//    }
+    @DeleteMapping("/{id}/v1")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @PathVariable String id
+    ){
+       bookService.delete(id);
+    }
 //
-//    @PostMapping("/{id}/buy/v1")
-//    @ResponseStatus(HttpStatus.OK)
-//    public BookDto buy(
-//            @PathVariable String id,
-//            @Valid @RequestBody BuyRequest buyRequest
-//    ){
-//        return bookService.buy(id, buyRequest);
-//    }
+    @PostMapping("/{id}/buy/v1")
+    @ResponseStatus(HttpStatus.OK)
+    public BookDto buy(
+            @PathVariable String id,
+            @Valid @RequestBody BuyRequest buyRequest
+    ){
+        return bookService.buy(id, buyRequest);
+    }
 }

@@ -2,6 +2,8 @@ package it.its.demo.demo_service.repository;
 
 import it.its.demo.demo_service.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -29,11 +31,10 @@ public interface  BookRepository extends JpaRepository<Book,String>{
 //        return books;
 //    }
 //
-//    public List<Book> findByName(String name){
-//        return books.stream()
-//                .filter(book -> book.getName().equals(name))
-//                .collect(Collectors.toList());
-//    }
+    List<Book> findByNameContaining(String name);
+
+    @Query("select b from Book b where b.name= :name")
+    public List<Book> findByNameWithQuery(@Param("name")String name);
 //
 //    public int delete(String id){
 //
