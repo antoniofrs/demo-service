@@ -21,6 +21,5 @@ public class Author {
     String name;
 
     @OneToMany(mappedBy = "author")
-    @JsonManagedReference
     private List<Book> books;
 }

@@ -15,9 +15,16 @@ public class BookMapper {
 
     public BookDto toDto(Book book){
         BookDto bookDto = new BookDto();
+
+        AuthorWithoutBooksDto authorWithoutBooksDto =
+                new AuthorWithoutBooksDto(
+                        book.getAuthor().getId(),
+                        book.getAuthor().getName()
+                );
+
         bookDto.setId(book.getId());
         bookDto.setName(book.getName());
-        bookDto.setAuthor(book.getAuthor());
+        bookDto.setAuthor(authorWithoutBooksDto);
         bookDto.setQuantity(book.getQuantity());
         bookDto.setPrice(book.getPrice());
         return bookDto;
@@ -30,26 +37,6 @@ public class BookMapper {
         book.setAuthor(authorMapper.toModel(authorDto));
         book.setQuantity(bookDto.getQuantity());
         book.setPrice(bookDto.getPrice());
-        return book;
-    }
-
-    public Book toModel(String id, PatchBook patchBook, AuthorDto authorDto){
-        Book book = new Book();
-        book.setId(id);
-        book.setName(patchBook.getName());
-        book.setAuthor(authorMapper.toModel(authorDto));
-        book.setQuantity(patchBook.getQuantity());
-        book.setPrice(patchBook.getPrice());
-        return book;
-    }
-
-    public Book toModel(PatchBookWithId patchBook, AuthorDto authorDto){
-        Book book = new Book();
-        book.setId(patchBook.getId());
-        book.setName(patchBook.getName());
-        book.setAuthor(authorMapper.toModel(authorDto));
-        book.setQuantity(patchBook.getQuantity());
-        book.setPrice(patchBook.getPrice());
         return book;
     }
 
