@@ -1,5 +1,6 @@
 package it.its.demo.demo_service.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "fk_author_id")
+    @JsonBackReference
     Author author;
 }
 
