@@ -1,14 +1,14 @@
-package it.its.demo.demo_service.dto;
+package it.its.demo.demo_service.dto.book;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class PatchBookWithId extends PatchBook {
+public class ReqPatchBookWithId extends ReqPatchBook {
     @NotBlank(message = "Id cannot be blank")
     String id;
 
-    public PatchBookWithId(String name, Integer author, Integer quantity, Double price) {
+    public ReqPatchBookWithId(String name, Integer author, Integer quantity, Double price) {
         super(name, author, quantity, price);
     }
 }

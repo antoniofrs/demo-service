@@ -1,9 +1,9 @@
 package it.its.demo.demo_service.controller;
 
-import it.its.demo.demo_service.dto.BookDto;
+import it.its.demo.demo_service.dto.book.ResBookDto;
 import it.its.demo.demo_service.dto.BuyRequest;
-import it.its.demo.demo_service.dto.InsertBook;
-import it.its.demo.demo_service.dto.PatchBook;
+import it.its.demo.demo_service.dto.book.ReqInsertBook;
+import it.its.demo.demo_service.dto.book.ReqPatchBook;
 import it.its.demo.demo_service.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,28 +31,28 @@ public class BookController {
 
     @PostMapping("/v1")
     @ResponseStatus(HttpStatus.CREATED)
-    public BookDto insert (
-            @Valid @RequestBody InsertBook book
+    public ResBookDto insert (
+            @Valid @RequestBody ReqInsertBook book
     ) {
         return bookService.insert(book);
     }
 
     @PatchMapping("/{id}/v1")
     @ResponseStatus(HttpStatus.OK)
-    public BookDto patch (
+    public ResBookDto patch (
             @PathVariable String id,
-            @RequestBody PatchBook patchBook
+            @RequestBody ReqPatchBook reqPatchBook
     ) {
-        return bookService.patch(id, patchBook);
+        return bookService.patch(id, reqPatchBook);
     }
 
     @PutMapping("/{id}/v1")
     @ResponseStatus(HttpStatus.OK)
-    public BookDto put (
+    public ResBookDto put (
             @PathVariable String id,
-            @RequestBody InsertBook insertBook
+            @RequestBody ReqInsertBook reqInsertBook
     ) {
-        return bookService.put(id, insertBook);
+        return bookService.put(id, reqInsertBook);
     }
 //
 //    @GetMapping("/v1")
@@ -63,7 +63,7 @@ public class BookController {
 //
     @GetMapping("/{id}/v1")
     @ResponseStatus(HttpStatus.OK)
-    public BookDto findById(
+    public ResBookDto findById(
             @PathVariable String id
     ){
         return bookService.findById(id);
@@ -71,7 +71,7 @@ public class BookController {
 //
     @GetMapping("/search/v1")
     @ResponseStatus(HttpStatus.OK)
-    public List<BookDto> findByName(
+    public List<ResBookDto> findByName(
             @RequestParam String name
     ){
         return bookService.findByName(name);
@@ -87,7 +87,7 @@ public class BookController {
 //
     @PostMapping("/{id}/buy/v1")
     @ResponseStatus(HttpStatus.OK)
-    public BookDto buy(
+    public ResBookDto buy(
             @PathVariable String id,
             @Valid @RequestBody BuyRequest buyRequest
     ){

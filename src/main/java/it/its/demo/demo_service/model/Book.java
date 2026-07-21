@@ -23,7 +23,7 @@ public class Book {
     Integer quantity;
     Double price;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_author_id")
     //@JsonBackReference
     Author author;

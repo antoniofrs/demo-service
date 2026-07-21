@@ -1,11 +1,14 @@
 package it.its.demo.demo_service.service;
 
 import it.its.demo.demo_service.dto.*;
+import it.its.demo.demo_service.dto.book.ReqInsertBook;
+import it.its.demo.demo_service.dto.book.ReqPatchBook;
+import it.its.demo.demo_service.dto.book.ReqPatchBookWithId;
+import it.its.demo.demo_service.dto.book.ResBookDto;
 import it.its.demo.demo_service.exceptions.BookNotFoundException;
 import it.its.demo.demo_service.exceptions.BooksNotAvailable;
 import it.its.demo.demo_service.mapper.AuthorMapper;
 import it.its.demo.demo_service.mapper.BookMapper;
-import it.its.demo.demo_service.model.Author;
 import it.its.demo.demo_service.model.Book;
 import it.its.demo.demo_service.model.Transaction;
 import it.its.demo.demo_service.repository.BookRepository;
@@ -14,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,27 +39,27 @@ public class BookService {
     @Autowired
     private AuthorMapper authorMapper;
 
-    public BookDto insert(InsertBook insertBook) {
-        AuthorDto author= authorService.findById(insertBook.getAuthor());
-        Book book = bookMapper.toModel(insertBook, author);
+    public ResBookDto insert(ReqInsertBook reqInsertBook) {
+        AuthorDto author= authorService.findById(reqInsertBook.getAuthor());
+        Book book = bookMapper.toModel(reqInsertBook, author);
         bookRepository.save(book);
         return bookMapper.toDto(book);
     }
 
 
-    public BookDto findById(String id) {
+    public ResBookDto findById(String id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
         return bookMapper.toDto(book);
     }
 //
-    public List<BookDto> findAll() {
+    public List<ResBookDto> findAll() {
         return bookRepository.findAll().stream()
                 .map(book -> bookMapper.toDto(book))
                 .collect(Collectors.toList());
     }
 //
-    public List<BookDto> findByName(String name) {
+    public List<ResBookDto> findByName(String name) {
         return bookRepository.findByNameWithQuery(name).stream()
                 .map(bookMapper::toDto)
                 .toList();
@@ -77,7 +79,7 @@ public class BookService {
 //        }
 //    }
 //
-    public BookDto buy(String id, BuyRequest request) {
+    public ResBookDto buy(String id, BuyRequest request) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
 
@@ -99,27 +101,27 @@ public class BookService {
 //
 //
 //    // PatchBook -> BookDto
-    public BookDto patch(String id, PatchBook patchBook) {
+    public ResBookDto patch(String id, ReqPatchBook reqPatchBook) {
 
         Book toUpdate = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
 
-        if (patchBook.getAuthor() != null) {
+        if (reqPatchBook.getAuthor() != null) {
 
             toUpdate.setAuthor(
                     authorMapper.toModel(
-                            authorService.findById(patchBook.getAuthor())));
+                            authorService.findById(reqPatchBook.getAuthor())));
         }
 
-        if (patchBook.getName() != null) {
-            toUpdate.setName(patchBook.getName());
+        if (reqPatchBook.getName() != null) {
+            toUpdate.setName(reqPatchBook.getName());
         }
 
-        if (patchBook.getQuantity() != null) {
-            toUpdate.setQuantity(patchBook.getQuantity());
+        if (reqPatchBook.getQuantity() != null) {
+            toUpdate.setQuantity(reqPatchBook.getQuantity());
         }
-        if (patchBook.getPrice() != null) {
-            toUpdate.setPrice(patchBook.getPrice());
+        if (reqPatchBook.getPrice() != null) {
+            toUpdate.setPrice(reqPatchBook.getPrice());
         }
 
         bookRepository.save(toUpdate);
@@ -128,7 +130,7 @@ public class BookService {
     }
 //
 //    // BookInsertDto -> BookDto
-    public BookDto put(String id, InsertBook insert) {
+    public ResBookDto put(String id, ReqInsertBook insert) {
 
         bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
@@ -141,7 +143,7 @@ public class BookService {
     }
 
     //patch con withIdBookPatch
-    public BookDto patch(PatchBookWithId patchBook) {
+    public ResBookDto patch(ReqPatchBookWithId patchBook) {
 
         Book toUpdate = bookRepository.findById(patchBook.getId())
                 .orElseThrow(() -> new BookNotFoundException(patchBook.getId()));

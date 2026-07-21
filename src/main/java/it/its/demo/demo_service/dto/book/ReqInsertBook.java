@@ -1,4 +1,4 @@
-package it.its.demo.demo_service.dto;
+package it.its.demo.demo_service.dto.book;
 
 import it.its.demo.demo_service.validators.CustomNameConstraint;
 import it.its.demo.demo_service.validators.QuantityConstraint;
@@ -7,13 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 @AllArgsConstructor
 @Data
-public class InsertBook {
+public class ReqInsertBook {
 
     @CustomNameConstraint(value="La mia storia con Albano")
     @NotBlank(message = "Name cannot be blank")

@@ -1,4 +1,4 @@
-package it.its.demo.demo_service.dto;
+package it.its.demo.demo_service.dto.book;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BookWithoutAuthor {
+public class ResBookDto {
     String id;
     String name;
+    InnerAuthorDto author;
+    //String author;
     Integer quantity;
     Double price;
 }

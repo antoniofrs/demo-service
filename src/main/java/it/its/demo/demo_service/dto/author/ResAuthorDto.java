@@ -1,6 +1,6 @@
-package it.its.demo.demo_service.dto;
+package it.its.demo.demo_service.dto.author;
 
-import it.its.demo.demo_service.dto.author.InnerBookDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class AuthorDto {
+public class ResAuthorDto {
 
     Integer id;
     String name;

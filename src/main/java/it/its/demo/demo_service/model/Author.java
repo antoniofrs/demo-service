@@ -21,7 +21,7 @@ public class Author {
     Integer id;
     String name;
 
-    @OneToMany(mappedBy = "author")
+    @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade= CascadeType.REMOVE)
     //@JsonManagedReference
     private List<Book> books;
 }
