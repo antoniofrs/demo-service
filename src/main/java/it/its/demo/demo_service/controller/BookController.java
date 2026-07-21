@@ -1,6 +1,8 @@
 package it.its.demo.demo_service.controller;
 
 import it.its.demo.demo_service.dto.book.*;
+import it.its.demo.demo_service.dto.transaction.ReqBuyDto;
+import it.its.demo.demo_service.dto.transaction.ResTransactionTotalDto;
 import it.its.demo.demo_service.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +82,14 @@ public class BookController {
         return bookService.findById(id);
     }
 
+    @GetMapping("/transactions/{id}/v1")
+    @ResponseStatus(HttpStatus.OK)
+    public ResBookWithTransactionsDto findByIdWithTransactions(
+            @PathVariable String id
+    ){
+        return bookService.findByIdWithTransactions(id);
+    }
+
     @GetMapping("/search/v1")
     @ResponseStatus(HttpStatus.OK)
     public List<ResBookDto> findByName(
@@ -95,21 +105,22 @@ public class BookController {
     ){
        bookService.delete(id);
     }
-//
-//    @PostMapping("/{id}/buy/v1")
-//    @ResponseStatus(HttpStatus.OK)
-//    public BookDto buy(
-//            @PathVariable String id,
-//            @Valid @RequestBody BuyRequest buyRequest
-//    ){
-//        return bookService.buy(id, buyRequest);
-//    }
-//
-//    @GetMapping("/{id}/buy/total/v1")
-//    @ResponseStatus(HttpStatus.OK)
-//    public TransactionTotalDto transactionTotal(
-//            @PathVariable String id
-//    ){
-//        return bookService.total(id);
-//    }
+
+    @PostMapping("/{id}/buy/v1")
+    @ResponseStatus(HttpStatus.OK)
+    public ResBookDto buy(
+            @PathVariable String id,
+            @Valid @RequestBody ReqBuyDto reqBuyDto
+    ){
+        return bookService.buy(id, reqBuyDto);
+    }
+
+    @GetMapping("/{id}/buy/total/v1")
+    @ResponseStatus(HttpStatus.OK)
+    public ResTransactionTotalDto transactionTotal(
+            @PathVariable String id
+    ){
+        return bookService.total(id);
+    }
+
 }

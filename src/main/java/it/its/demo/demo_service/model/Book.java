@@ -1,10 +1,11 @@
 package it.its.demo.demo_service.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -23,6 +24,9 @@ public class Book {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_author_id")
     Author author;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
 }
 
 /*

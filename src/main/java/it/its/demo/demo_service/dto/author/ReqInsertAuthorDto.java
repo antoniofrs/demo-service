@@ -13,5 +13,5 @@ public class ReqInsertAuthorDto {
     @NotBlank(message = "Author name cannot be null")
     private String name;
 
-    private List<Book> books;
+    private List<InnerBookDto> books;
 }
