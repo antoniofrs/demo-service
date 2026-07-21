@@ -1,11 +1,13 @@
 package it.its.demo.demo_service.mapper;
 
-import it.its.demo.demo_service.dto.*;
+import it.its.demo.demo_service.dto.author.ResAuthorDto;
+import it.its.demo.demo_service.dto.book.InnerAuthorDto;
+import it.its.demo.demo_service.dto.book.ResBookDto;
+import it.its.demo.demo_service.dto.book.ReqInsertBookDto;
+import it.its.demo.demo_service.dto.book.ReqPutBookDtoDto;
 import it.its.demo.demo_service.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 public class BookMapper {
@@ -13,38 +15,38 @@ public class BookMapper {
     @Autowired
     AuthorMapper authorMapper;
 
-    public BookDto toDto(Book book){
-        BookDto bookDto = new BookDto();
+    public ResBookDto toDto(Book book){
+        ResBookDto resBookDto = new ResBookDto();
 
-        AuthorWithoutBooksDto authorWithoutBooksDto =
-                new AuthorWithoutBooksDto(
+        InnerAuthorDto innerAuthorDto =
+                new InnerAuthorDto(
                         book.getAuthor().getId(),
                         book.getAuthor().getName()
                 );
 
-        bookDto.setId(book.getId());
-        bookDto.setName(book.getName());
-        bookDto.setAuthor(authorWithoutBooksDto);
-        bookDto.setQuantity(book.getQuantity());
-        bookDto.setPrice(book.getPrice());
-        return bookDto;
+        resBookDto.setId(book.getId());
+        resBookDto.setName(book.getName());
+        resBookDto.setAuthor(innerAuthorDto);
+        resBookDto.setQuantity(book.getQuantity());
+        resBookDto.setPrice(book.getPrice());
+        return resBookDto;
     }
 
-    public Book toModel(InsertBook bookDto, AuthorDto authorDto){
+    public Book toModel(ReqInsertBookDto bookDto, ResAuthorDto resAuthorDto){
         Book book = new Book();
         //book.setId(UUID.randomUUID().toString());
         book.setName(bookDto.getName());
-        book.setAuthor(authorMapper.toModel(authorDto));
+        book.setAuthor(authorMapper.toModel(resAuthorDto));
         book.setQuantity(bookDto.getQuantity());
         book.setPrice(bookDto.getPrice());
         return book;
     }
 
-    public Book toModel(PutBook bookDto, AuthorDto authorDto){
+    public Book toModel(ReqPutBookDtoDto bookDto, ResAuthorDto resAuthorDto){
         Book book = new Book();
         book.setId(bookDto.getId());
         book.setName(bookDto.getName());
-        book.setAuthor(authorMapper.toModel(authorDto));
+        book.setAuthor(authorMapper.toModel(resAuthorDto));
         book.setQuantity(bookDto.getQuantity());
         book.setPrice(bookDto.getPrice());
         return book;

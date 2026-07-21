@@ -1,15 +1,15 @@
-package it.its.demo.demo_service.dto;
+package it.its.demo.demo_service.dto.book;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class PutBook extends InsertBook{
+public class ReqPutBookDtoDto extends ReqInsertBookDto {
 
     @NotBlank(message = "Id cannot be blank")
     String id;
 
-    public PutBook(String name, Integer author, Integer quantity, Float price) {
+    public ReqPutBookDtoDto(String name, Integer author, Integer quantity, Float price) {
         super(name, author, quantity, price);
     }
 }

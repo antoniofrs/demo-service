@@ -1,8 +1,7 @@
 package it.its.demo.demo_service.controller;
 
-import it.its.demo.demo_service.dto.AuthorDto;
-import it.its.demo.demo_service.dto.InsertAuthorDto;
-import it.its.demo.demo_service.model.Author;
+import it.its.demo.demo_service.dto.author.ResAuthorDto;
+import it.its.demo.demo_service.dto.author.ReqInsertAuthorDto;
 import it.its.demo.demo_service.service.AuthorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ public class AuthorController {
 
     @GetMapping("/{id}/v1")
     @ResponseStatus(HttpStatus.OK)
-    public AuthorDto findById(
+    public ResAuthorDto findById(
             @PathVariable Integer id
     ) {
         return authorService.findById(id);
@@ -26,12 +25,19 @@ public class AuthorController {
 
     @PostMapping("/v1")
     @ResponseStatus(HttpStatus.CREATED)
-    public AuthorDto insert(
-            @Valid @RequestBody InsertAuthorDto insertAuthorDto
+    public ResAuthorDto insert(
+            @Valid @RequestBody ReqInsertAuthorDto reqInsertAuthorDto
             ) {
-        return authorService.insert(insertAuthorDto);
+        return authorService.insert(reqInsertAuthorDto);
     }
 
+    @DeleteMapping("/{id}/v1")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+            @PathVariable Integer id
+    ) {
+        authorService.delete(id);
+    }
 
 
 }

@@ -1,17 +1,14 @@
 package it.its.demo.demo_service.service;
 
-import it.its.demo.demo_service.dto.*;
+import it.its.demo.demo_service.dto.author.ResAuthorDto;
+import it.its.demo.demo_service.dto.book.*;
 import it.its.demo.demo_service.exceptions.BookDeletedException;
 import it.its.demo.demo_service.exceptions.BookNotFoundException;
-import it.its.demo.demo_service.exceptions.BooksNotAvailable;
 import it.its.demo.demo_service.mapper.AuthorMapper;
 import it.its.demo.demo_service.mapper.BookMapper;
-import it.its.demo.demo_service.model.Author;
 import it.its.demo.demo_service.model.Book;
-import it.its.demo.demo_service.model.Transaction;
 import it.its.demo.demo_service.repository.BookRepository;
 import it.its.demo.demo_service.repository.TransactionRepository;
-import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,29 +33,29 @@ public class BookService {
     @Autowired
     private TransactionRepository transactionRepository;
 
-    public BookDto insert(InsertBook insertBook) {
+    public ResBookDto insert(ReqInsertBookDto reqInsertBookDto) {
 
-        AuthorDto authorDto = authorService.findById(insertBook.getAuthor());
+        ResAuthorDto resAuthorDto = authorService.findById(reqInsertBookDto.getAuthor());
 
-        Book book = bookMapper.toModel(insertBook, authorDto);
+        Book book = bookMapper.toModel(reqInsertBookDto, resAuthorDto);
         bookRepository.save(book);
         return bookMapper.toDto(book);
     }
 
 
-    public BookDto findById(String id) {
+    public ResBookDto findById(String id) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
         return bookMapper.toDto(book);
     }
 
-    public List<BookDto> findAll() {
+    public List<ResBookDto> findAll() {
         return bookRepository.findAll().stream()
                 .map(book -> bookMapper.toDto(book))
                 .collect(Collectors.toList());
     }
 
-    public List<BookDto> findByName(String name) {
+    public List<ResBookDto> findByName(String name) {
         return bookRepository.findByNameWithQuery(name).stream()
                 .map(book -> bookMapper.toDto(book))
                 .collect(Collectors.toList());
@@ -101,7 +98,7 @@ public class BookService {
 //
 //
 //    // PatchBook -> BookDto
-    public BookDto patch(String id, PatchBook patchBook) {
+    public ResBookDto patch(String id, ReqPatchBookDto patchBook) {
 
         Book toUpdate = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
@@ -129,7 +126,7 @@ public class BookService {
         return bookMapper.toDto(bookRepository.save(toUpdate));
     }
 
-    public BookDto patch(PatchBookWithId patchBook) {
+    public ResBookDto patch(ReqPatchBookDtoWithIdDto patchBook) {
 
         Book toUpdate = bookRepository.findById(patchBook.getId())
                 .orElseThrow(() -> new BookNotFoundException(patchBook.getId()));
@@ -158,26 +155,26 @@ public class BookService {
     }
 //
 //    // BookInsertDto -> BookDto
-    public BookDto put(String id, InsertBook insert) {
+    public ResBookDto put(String id, ReqInsertBookDto insert) {
 
         bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
 
-        AuthorDto authorDto = authorService.findById(insert.getAuthor());
-        Book bookToPut = bookMapper.toModel(insert, authorDto);
+        ResAuthorDto resAuthorDto = authorService.findById(insert.getAuthor());
+        Book bookToPut = bookMapper.toModel(insert, resAuthorDto);
         bookToPut.setId(id);
 
         return bookMapper.toDto(bookRepository.save(bookToPut));
 
     }
 
-    public BookDto put(PutBook insert) {
+    public ResBookDto put(ReqPutBookDtoDto insert) {
 
         bookRepository.findById(insert.getId())
                 .orElseThrow(() -> new BookNotFoundException(insert.getId()));
 
-        AuthorDto authorDto = authorService.findById(insert.getAuthor());
-        Book bookToPut = bookMapper.toModel(insert, authorDto);
+        ResAuthorDto resAuthorDto = authorService.findById(insert.getAuthor());
+        Book bookToPut = bookMapper.toModel(insert, resAuthorDto);
         return bookMapper.toDto(bookRepository.save(bookToPut));
 
     }

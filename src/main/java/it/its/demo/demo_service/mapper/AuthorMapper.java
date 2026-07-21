@@ -1,29 +1,29 @@
 package it.its.demo.demo_service.mapper;
 
-import it.its.demo.demo_service.dto.AuthorDto;
-import it.its.demo.demo_service.dto.BookWithoutAuthorDto;
-import it.its.demo.demo_service.dto.InsertAuthorDto;
+import it.its.demo.demo_service.dto.author.ResAuthorDto;
+import it.its.demo.demo_service.dto.author.InnerBookDto;
+import it.its.demo.demo_service.dto.author.ReqInsertAuthorDto;
 import it.its.demo.demo_service.model.Author;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class AuthorMapper {
 
-    public AuthorDto toDto(Author author) {
-        AuthorDto authorDto = new AuthorDto();
-        List<BookWithoutAuthorDto> bookWithoutAuthorDtoList = new ArrayList<>();
+    public ResAuthorDto toDto(Author author) {
+        ResAuthorDto resAuthorDto = new ResAuthorDto();
+        List<InnerBookDto> innerBookDtoList = new ArrayList<>();
 
-        authorDto.setId(author.getId());
-        authorDto.setName(author.getName());
+        resAuthorDto.setId(author.getId());
+        resAuthorDto.setName(author.getName());
 
+        System.out.println("Carico la lista di libri....");
         author.getBooks().stream()
                 .map(book ->
-                        bookWithoutAuthorDtoList.add(
-                            new BookWithoutAuthorDto(
+                        innerBookDtoList.add(
+                            new InnerBookDto(
                                     book.getId(),
                                     book.getName(),
                                     book.getQuantity(),
@@ -32,26 +32,26 @@ public class AuthorMapper {
                 ).toList();
 
 
-        authorDto.setBooks(bookWithoutAuthorDtoList);
+        resAuthorDto.setBooks(innerBookDtoList);
 
-        return authorDto;
+        return resAuthorDto;
     }
 
-    public Author toModel(AuthorDto authorDto) {
+    public Author toModel(ResAuthorDto resAuthorDto) {
 
         Author author = new Author();
 
-        author.setId(authorDto.getId());
-        author.setName(authorDto.getName());
+        author.setId(resAuthorDto.getId());
+        author.setName(resAuthorDto.getName());
 
         return author;
     }
 
-    public Author toModel(InsertAuthorDto insertAuthorDto) {
+    public Author toModel(ReqInsertAuthorDto reqInsertAuthorDto) {
 
         Author author = new Author();
 
-        author.setName(insertAuthorDto.getName());
+        author.setName(reqInsertAuthorDto.getName());
 
         return author;
     }

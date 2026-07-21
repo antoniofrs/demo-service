@@ -20,7 +20,7 @@ public class Book {
     Integer quantity;
     Float price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_author_id")
     Author author;
 }
