@@ -2,6 +2,7 @@ package it.its.demo.demo_service.service;
 
 import it.its.demo.demo_service.dto.author.ResAuthorDto;
 import it.its.demo.demo_service.dto.book.*;
+import it.its.demo.demo_service.dto.category.ResCategoryDto;
 import it.its.demo.demo_service.dto.transaction.ReqBuyDto;
 import it.its.demo.demo_service.exceptions.BookDeletedException;
 import it.its.demo.demo_service.exceptions.BookNotFoundException;
@@ -9,9 +10,11 @@ import it.its.demo.demo_service.exceptions.BooksNotAvailable;
 import it.its.demo.demo_service.exceptions.CustomException;
 import it.its.demo.demo_service.mapper.AuthorMapper;
 import it.its.demo.demo_service.mapper.BookMapper;
+import it.its.demo.demo_service.mapper.CategoryMapper;
 import it.its.demo.demo_service.model.Book;
 import it.its.demo.demo_service.model.Transaction;
 import it.its.demo.demo_service.repository.BookRepository;
+import it.its.demo.demo_service.repository.CategoryRepository;
 import it.its.demo.demo_service.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +40,25 @@ public class BookService {
     private AuthorService authorService;
 
     @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
     private TransactionRepository transactionRepository;
 
+    @Autowired
+    private CategoryMapper categoryMapper;
+
+
+    @Transactional
     public ResBookDto insert(ReqInsertBookDto reqInsertBookDto) {
 
         ResAuthorDto resAuthorDto = authorService.findById(reqInsertBookDto.getAuthor());
 
-        Book book = bookMapper.toModel(reqInsertBookDto, resAuthorDto);
+        List<ResCategoryDto> categoriesDto =
+                (reqInsertBookDto.getCategories() != null && !reqInsertBookDto.getCategories().isEmpty()) ?
+                        categoryService.findAllByIds(reqInsertBookDto.getCategories()) : new ArrayList<>();
+
+        Book book = bookMapper.toModel(reqInsertBookDto, resAuthorDto, categoriesDto);
         bookRepository.save(book);
         return bookMapper.toDto(book);
     }
@@ -110,6 +125,19 @@ public class BookService {
             toUpdate.setPrice(patchBook.getPrice());
         }
 
+        if (patchBook.getCategories() != null && !patchBook.getCategories().isEmpty()) {
+
+            List<ResCategoryDto> categoriesDto =
+                    (patchBook.getCategories() != null && !patchBook.getCategories().isEmpty()) ?
+                            categoryService.findAllByIds(patchBook.getCategories()) : new ArrayList<>();
+
+
+            toUpdate.setCategories(new ArrayList<>());
+            categoriesDto.stream()
+                    .map( categoryDto -> toUpdate.getCategories().add(categoryMapper.toModel(categoryDto)
+                    )).collect(Collectors.toList());
+        }
+
         return bookMapper.toDto(bookRepository.save(toUpdate));
     }
 
@@ -138,6 +166,19 @@ public class BookService {
             toUpdate.setPrice(patchBook.getPrice());
         }
 
+        if (patchBook.getCategories() != null && !patchBook.getCategories().isEmpty()) {
+
+            List<ResCategoryDto> categoriesDto =
+                    (patchBook.getCategories() != null && !patchBook.getCategories().isEmpty()) ?
+                            categoryService.findAllByIds(patchBook.getCategories()) : new ArrayList<>();
+
+
+            toUpdate.setCategories(new ArrayList<>());
+            categoriesDto.stream()
+                    .map( categoryDto -> toUpdate.getCategories().add(categoryMapper.toModel(categoryDto)
+                    )).collect(Collectors.toList());
+        }
+
         return bookMapper.toDto(bookRepository.save(toUpdate));
     }
 //
@@ -148,7 +189,12 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException(id));
 
         ResAuthorDto resAuthorDto = authorService.findById(insert.getAuthor());
-        Book bookToPut = bookMapper.toModel(insert, resAuthorDto);
+
+        List<ResCategoryDto> categoriesDto =
+                (insert.getCategories() != null) ?
+                        categoryService.findAllByIds(insert.getCategories()) : new ArrayList<>();
+
+        Book bookToPut = bookMapper.toModel(insert, resAuthorDto, categoriesDto);
         bookToPut.setId(id);
 
         return bookMapper.toDto(bookRepository.save(bookToPut));

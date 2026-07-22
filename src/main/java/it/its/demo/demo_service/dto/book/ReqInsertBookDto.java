@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Data
 public class ReqInsertBookDto {
@@ -24,5 +26,7 @@ public class ReqInsertBookDto {
     @NotNull(message = "Price cannot be null")
     @Positive(message = "Price cannot be negative")
     Float price;
+
+    List<Integer> categories;
 
 }

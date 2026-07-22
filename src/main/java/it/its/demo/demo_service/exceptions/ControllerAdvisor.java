@@ -14,6 +14,12 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ControllerAdvisor {
 
+    @ExceptionHandler(CategoriesNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleCategoriesNotFoundException(CategoriesNotFoundException e){
+        return e.getMessage();
+    }
+
     @ExceptionHandler(AuthorNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleAuthorNotFoundException(AuthorNotFoundException e){

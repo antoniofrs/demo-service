@@ -1,8 +1,11 @@
 package it.its.demo.demo_service.dto.book;
 
+import it.its.demo.demo_service.dto.category.ResCategoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,4 +16,5 @@ public class ResBookDto {
     InnerAuthorDto author;
     Integer quantity;
     Float price;
+    List<ResCategoryDto> categories;
 }

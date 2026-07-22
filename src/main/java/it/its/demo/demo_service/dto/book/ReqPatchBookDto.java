@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 
 @AllArgsConstructor
 @Data
@@ -15,5 +17,6 @@ public class ReqPatchBookDto {
     Integer quantity;
     @Positive
     Float price;
+    List<Integer> categories;
 
 }

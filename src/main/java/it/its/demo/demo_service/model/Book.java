@@ -28,7 +28,7 @@ public class Book {
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.MERGE )
     @JoinTable(
             name = "book_category",
             joinColumns = @JoinColumn(name = "fk_book_id"),
