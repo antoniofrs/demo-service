@@ -27,6 +27,19 @@ public class Book {
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
+<<<<<<< Updated upstream
+=======
+
+    public void addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+        transaction.setBook(this);
+    }
+
+    public void removeTransaction(Transaction transaction) {
+        transactions.remove(transaction);
+        transaction.setBook(null);
+    }
+>>>>>>> Stashed changes
 }
 
 /*

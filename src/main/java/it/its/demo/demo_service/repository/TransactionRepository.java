@@ -11,6 +11,10 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Repository
+<<<<<<< Updated upstream
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
+=======
+public interface TransactionRepository extends JpaRepository<Transaction, String> {
+>>>>>>> Stashed changes
 }

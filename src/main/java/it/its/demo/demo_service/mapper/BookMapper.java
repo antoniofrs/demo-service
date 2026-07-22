@@ -6,6 +6,10 @@ import it.its.demo.demo_service.model.Book;
 import it.its.demo.demo_service.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +34,37 @@ public class BookMapper {
         resBookDto.setAuthor(innerAuthorDto);
         resBookDto.setQuantity(book.getQuantity());
         resBookDto.setPrice(book.getPrice());
+        return resBookDto;
+    }
+    @Transactional
+    public ResBookWithTransactionsDto toDtoWithTransactions(Book book){
+        ResBookWithTransactionsDto resBookDto = new ResBookWithTransactionsDto();
+
+        InnerAuthorDto innerAuthorDto =
+                new InnerAuthorDto(
+                        book.getAuthor().getId(),
+                        book.getAuthor().getName()
+                );
+
+        resBookDto.setId(book.getId());
+        resBookDto.setName(book.getName());
+        resBookDto.setAuthor(innerAuthorDto);
+        resBookDto.setQuantity(book.getQuantity());
+        resBookDto.setPrice(book.getPrice());
+
+        List<InnerTransactionDto> innerTransactionDtoList = new ArrayList<>();
+
+        List<Transaction> transactions = book.getTransactions();
+        for (Transaction transaction: transactions) {
+            InnerTransactionDto innerTransactionDto = new InnerTransactionDto(
+                    transaction.getId(),
+                    transaction.getTotal()
+            );
+            innerTransactionDtoList.add(innerTransactionDto);
+        }
+
+        resBookDto.setTransactions(innerTransactionDtoList);
+
         return resBookDto;
     }
 
