@@ -3,6 +3,7 @@ package it.its.demo.demo_service.mapper;
 import it.its.demo.demo_service.dto.author.ResAuthorDto;
 import it.its.demo.demo_service.dto.book.*;
 import it.its.demo.demo_service.model.Book;
+import it.its.demo.demo_service.model.Category;
 import it.its.demo.demo_service.model.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -68,13 +69,14 @@ public class BookMapper {
         return resBookDto;
     }
 
-    public Book toModel(ReqInsertBookDto bookDto, ResAuthorDto resAuthorDto){
+    public Book toModel(ReqInsertBookDto bookDto, ResAuthorDto resAuthorDto, List<Category> categories){
         Book book = new Book();
         //book.setId(UUID.randomUUID().toString());
         book.setName(bookDto.getName());
         book.setAuthor(authorMapper.toModel(resAuthorDto));
         book.setQuantity(bookDto.getQuantity());
         book.setPrice(bookDto.getPrice());
+        book.setCategories(categories);
         return book;
     }
 

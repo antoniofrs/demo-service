@@ -10,6 +10,7 @@ import it.its.demo.demo_service.exceptions.CustomException;
 import it.its.demo.demo_service.mapper.AuthorMapper;
 import it.its.demo.demo_service.mapper.BookMapper;
 import it.its.demo.demo_service.model.Book;
+import it.its.demo.demo_service.model.Category;
 import it.its.demo.demo_service.model.Transaction;
 import it.its.demo.demo_service.repository.BookRepository;
 import it.its.demo.demo_service.repository.TransactionRepository;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,13 +38,21 @@ public class BookService {
     private AuthorService authorService;
 
     @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
     private TransactionRepository transactionRepository;
 
     public ResBookDto insert(ReqInsertBookDto reqInsertBookDto) {
 
         ResAuthorDto resAuthorDto = authorService.findById(reqInsertBookDto.getAuthor());
 
-        Book book = bookMapper.toModel(reqInsertBookDto, resAuthorDto);
+        List<Category> categories = new ArrayList<>();
+        if (reqInsertBookDto.getCategories() != null && !reqInsertBookDto.getCategories().isEmpty()) {
+            categories = categoryService.findAllById(reqInsertBookDto.getCategories());
+        }
+
+        Book book = bookMapper.toModel(reqInsertBookDto, resAuthorDto, categories);
         bookRepository.save(book);
         return bookMapper.toDto(book);
     }
@@ -147,7 +157,7 @@ public class BookService {
                 .orElseThrow(() -> new BookNotFoundException(id));
 
         ResAuthorDto resAuthorDto = authorService.findById(insert.getAuthor());
-        Book bookToPut = bookMapper.toModel(insert, resAuthorDto);
+        Book bookToPut = bookMapper.toModel(insert, resAuthorDto, null);
         bookToPut.setId(id);
 
         return bookMapper.toDto(bookRepository.save(bookToPut));

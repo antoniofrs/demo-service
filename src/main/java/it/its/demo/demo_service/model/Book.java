@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,15 @@ public class Book {
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "book_category", // Il nome della tabella ponte che verrà creata su Postgres
+            joinColumns = @JoinColumn(name = "book_id"), // Chiave esterna verso questa entità (Book)
+            inverseJoinColumns = @JoinColumn(name = "category_id") // Chiave esterna verso l'altra entità (Category)
+    )
+    private List<Category> categories = new ArrayList<>();
+
 
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
