@@ -28,6 +28,15 @@ public class Book {
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<Transaction> transactions;
 
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "book_category",
+            joinColumns = @JoinColumn(name = "fk_book_id"),
+            inverseJoinColumns = @JoinColumn(name = "fk_category_id")
+    )
+    private List<Category> categories;
+
+
     public void addTransaction(Transaction transaction) {
         transactions.add(transaction);
         transaction.setBook(this);

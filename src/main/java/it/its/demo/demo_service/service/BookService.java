@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -180,6 +181,10 @@ public class BookService {
         Transaction transaction = new Transaction();
         transaction.setBook(book);
         transaction.setTotal(request.getQuantity()*book.getPrice());
+
+//        List<Transaction> transactions = new ArrayList<Transaction>();
+//        transactions.add(transaction);
+//        book.setTransactions(transactions);
 
         book.addTransaction(transaction);
 
