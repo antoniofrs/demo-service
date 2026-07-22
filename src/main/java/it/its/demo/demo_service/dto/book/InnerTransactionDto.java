@@ -5,13 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-<<<<<<< Updated upstream
-@NoArgsConstructor
-@AllArgsConstructor
-public class InnerTransactionDto {
-    String id;
-    Float totale;
-=======
 @AllArgsConstructor
 @NoArgsConstructor
 public class InnerTransactionDto {
@@ -19,5 +12,4 @@ public class InnerTransactionDto {
     private String id;
     private Float total;
 
->>>>>>> Stashed changes
 }

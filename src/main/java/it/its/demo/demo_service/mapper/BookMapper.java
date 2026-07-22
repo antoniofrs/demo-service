@@ -53,8 +53,8 @@ public class BookMapper {
         resBookDto.setPrice(book.getPrice());
 
         List<InnerTransactionDto> innerTransactionDtoList = new ArrayList<>();
-
         List<Transaction> transactions = book.getTransactions();
+
         for (Transaction transaction: transactions) {
             InnerTransactionDto innerTransactionDto = new InnerTransactionDto(
                     transaction.getId(),
@@ -65,34 +65,6 @@ public class BookMapper {
 
         resBookDto.setTransactions(innerTransactionDtoList);
 
-        return resBookDto;
-    }
-
-    public ResBookWithTransactionsDto toDtoWithTransactions(Book book){
-        ResBookWithTransactionsDto resBookDto = new ResBookWithTransactionsDto();
-
-        InnerAuthorDto innerAuthorDto =
-                new InnerAuthorDto(
-                        book.getAuthor().getId(),
-                        book.getAuthor().getName()
-                );
-
-        resBookDto.setId(book.getId());
-        resBookDto.setName(book.getName());
-        resBookDto.setAuthor(innerAuthorDto);
-        resBookDto.setQuantity(book.getQuantity());
-        resBookDto.setPrice(book.getPrice());
-
-        List<InnerTransactionDto> transactionListDto = new ArrayList<>();
-        if (book.getTransactions() != null && !book.getTransactions().isEmpty()) {
-            for (Transaction transaction: book.getTransactions()) {
-                InnerTransactionDto transactionsDto = new InnerTransactionDto(
-                    transaction.getId(), transaction.getTotal()
-                );
-                transactionListDto.add(transactionsDto);
-            }
-        }
-        resBookDto.setTransactionList(transactionListDto);
         return resBookDto;
     }
 

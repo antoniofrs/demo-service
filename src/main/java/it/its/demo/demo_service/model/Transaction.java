@@ -13,15 +13,6 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-<<<<<<< Updated upstream
-    String id;
-
-    Float total;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_book_id")
-    Book book;
-=======
     private String id;
 
     private Float total;
@@ -29,5 +20,4 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_book_id")
     private Book book;
->>>>>>> Stashed changes
 }

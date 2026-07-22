@@ -2,10 +2,6 @@ package it.its.demo.demo_service.controller;
 
 import it.its.demo.demo_service.dto.book.*;
 import it.its.demo.demo_service.dto.transaction.ReqBuyDto;
-<<<<<<< Updated upstream
-import it.its.demo.demo_service.dto.transaction.ResTransactionTotalDto;
-=======
->>>>>>> Stashed changes
 import it.its.demo.demo_service.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,11 +83,7 @@ public class BookController {
 
     @GetMapping("/transactions/{id}/v1")
     @ResponseStatus(HttpStatus.OK)
-<<<<<<< Updated upstream
-    public ResBookWithTransactionsDto findByIdWithTransactions(
-=======
     public ResBookDto findByIdWithTransactions(
->>>>>>> Stashed changes
             @PathVariable String id
     ){
         return bookService.findByIdWithTransactions(id);
@@ -115,23 +107,6 @@ public class BookController {
 
     @PostMapping("/{id}/buy/v1")
     @ResponseStatus(HttpStatus.OK)
-<<<<<<< Updated upstream
-    public ResBookDto buy(
-            @PathVariable String id,
-            @Valid @RequestBody ReqBuyDto reqBuyDto
-    ){
-        return bookService.buy(id, reqBuyDto);
-    }
-
-    @GetMapping("/{id}/buy/total/v1")
-    @ResponseStatus(HttpStatus.OK)
-    public ResTransactionTotalDto transactionTotal(
-            @PathVariable String id
-    ){
-        return bookService.total(id);
-    }
-
-=======
     public ResBookWithTransactionsDto buy(
             @PathVariable String id,
             @Valid @RequestBody ReqBuyDto buyRequest
@@ -146,5 +121,4 @@ public class BookController {
 //    ){
 //        return bookService.total(id);
 //    }
->>>>>>> Stashed changes
 }

@@ -3,10 +3,6 @@ package it.its.demo.demo_service.service;
 import it.its.demo.demo_service.dto.author.ResAuthorDto;
 import it.its.demo.demo_service.dto.book.*;
 import it.its.demo.demo_service.dto.transaction.ReqBuyDto;
-<<<<<<< Updated upstream
-import it.its.demo.demo_service.dto.transaction.ResTransactionTotalDto;
-=======
->>>>>>> Stashed changes
 import it.its.demo.demo_service.exceptions.BookDeletedException;
 import it.its.demo.demo_service.exceptions.BookNotFoundException;
 import it.its.demo.demo_service.exceptions.BooksNotAvailable;
@@ -171,12 +167,7 @@ public class BookService {
 
 
     @Transactional
-<<<<<<< Updated upstream
-    public ResBookDto buy(String id, ReqBuyDto request) {
-=======
     public ResBookWithTransactionsDto buy(String id, ReqBuyDto request) {
-
->>>>>>> Stashed changes
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new BookNotFoundException(id));
 
@@ -186,38 +177,10 @@ public class BookService {
 
         book.setQuantity(book.getQuantity() - request.getQuantity());
 
-<<<<<<< Updated upstream
-        bookRepository.save(book);
-
-=======
->>>>>>> Stashed changes
         Transaction transaction = new Transaction();
         transaction.setBook(book);
         transaction.setTotal(request.getQuantity()*book.getPrice());
 
-<<<<<<< Updated upstream
-        transactionRepository.save(transaction);
-
-        return bookMapper.toDto(book);
-    }
-
-
-    public ResTransactionTotalDto total(String id) {
-
-        List<Transaction> transactions = bookRepository.findById(id).orElseThrow(
-                () -> new BookNotFoundException(id)
-        ).getTransactions();
-
-        Float total = transactions.stream().
-                map(Transaction::getTotal)
-                .reduce((float) 0, Float::sum);
-
-        ResTransactionTotalDto resTransactionTotalDto = new ResTransactionTotalDto();
-        resTransactionTotalDto.setBookId(id);
-        resTransactionTotalDto.setTotal(total);
-        return resTransactionTotalDto;
-    }
-=======
         book.addTransaction(transaction);
 
         transactionRepository.save(transaction);
@@ -238,6 +201,5 @@ public class BookService {
 //        transactionTotalDto.setTotal(total);
 //        return transactionTotalDto;
 //    }
->>>>>>> Stashed changes
 
 }
